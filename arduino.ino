@@ -17,6 +17,7 @@
  * 
  * Dependencies:
  * - Uses "HelperFunctions.h" for sensor initialization and warning messages.
+ * Sourced and edited with chatgpt from: https://chatgpt.com/share/67d2f3ba-71fc-8006-a85b-afa9db975de6
  */
 
 #include <Arduino.h>
