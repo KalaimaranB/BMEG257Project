@@ -20,7 +20,4 @@ bool inRange(float integ_temp, float min, float max);
 // Converts a raw ADC sensor reading to temperature in Celsius.
 float voltageToTemperature(int analogValue);
 
-// Initializes the temperature sensor (returns true if successful).
-bool initTemperatureSensor();
-
 #endif // HELPER_FUNCTIONS_H
