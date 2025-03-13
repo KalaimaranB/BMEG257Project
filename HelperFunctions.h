@@ -14,9 +14,6 @@ float readVoltage(int pinNumber);
 // Sends a warning if the temperature is out of range.
 void sendWarning(float temperature, int LED_BUILTIN);
 
-// Sends a long blink warning for sensor initialization failure.
-void sendFailedSetupWarning(int LED_BUILTIN);
-
 // Checks if a given temperature is within a safe range.
 bool inRange(float integ_temp, float min, float max);
 
