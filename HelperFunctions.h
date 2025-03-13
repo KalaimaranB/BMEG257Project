@@ -1,27 +1,29 @@
-/*
-* HelperFunctions.h
-*
-* This file contains useful function structure functions for the arduino
-*/
+/**
+ * @file HelperFunctions.h
+ * @brief Contains utility function declarations for temperature monitoring.
+ */
 
-#ifndef HELPERFUNCTIONS_H
-#define HELPERFUNCTIONS_H
+#ifndef HELPER_FUNCTIONS_H
+#define HELPER_FUNCTIONS_H
 
-void Audible( bool thresh_pass, int pin_number );
+#include <Arduino.h>  // Required for analogRead, digitalWrite, and Serial
 
-// Light function that will turn on the LED light if threshold is achieved.
-void LightIndic( bool thresh_pass, int pin_number );
+// Reads voltage from an analog sensor pin.
+float readVoltage(int pinNumber);
 
-// Function to read the temperature from the sensor
-float readTemperature();
+// Sends a warning if the temperature is out of range.
+void sendWarning(float temperature, int LED_BUILTIN);
 
-// Function to send warning signal to user that temperature is outside range
-void sendWarning(float temperature);
+// Sends a long blink warning for sensor initialization failure.
+void sendFailedSetupWarning(int LED_BUILTIN);
 
-// Function to check if temperature is within range and send warning otherwise
-void checkTemperature();
+// Checks if a given temperature is within a safe range.
+bool inRange(float integ_temp, float min, float max);
 
-// Function to initialize the temperature sensor with proper values
-bool initTemepratureSensor();
+// Converts a raw ADC sensor reading to temperature in Celsius.
+float voltageToTemperature(int analogValue);
 
-#endif // HELPERFUNCTIONS_H
+// Initializes the temperature sensor (returns true if successful).
+bool initTemperatureSensor();
+
+#endif // HELPER_FUNCTIONS_H
