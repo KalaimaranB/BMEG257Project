@@ -54,27 +54,6 @@ void sendWarning(float temperature, int LED_BUILTIN) {
 }
 
 /**
- * @brief Sends a long blink warning for sensor initialization failure.
- * 
- * If the sensor fails to initialize, this function blinks the built-in LED with a long
- * ON duration (2 seconds) to indicate an issue.
- * 
- * @param LED_BUILTIN The built-in LED pin to use for warning.
- * 
- * @sideeffect Blinks the LED to signal an initialization failure.
- * 
- * @note This function does not stop execution but signals an issue visually.
- */
-void sendFailedSetupWarning(int LED_BUILTIN) {
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(2000);  // Long blink to indicate failure
-    digitalWrite(LED_BUILTIN, LOW);
-    delay(500);
-    delay(2000);  // Second Long blink to indicate failure
-    digitalWrite(LED_BUILTIN, LOW);
-}
-
-/**
  * @brief Checks if a given temperature is within a safe range.
  * 
  * This function verifies whether a temperature value is within the specified
