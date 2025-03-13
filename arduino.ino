@@ -50,9 +50,13 @@ void setup() {
     if (initTemperatureSensor()) {
         Serial.println("Temperature sensor initialized successfully.");
 	safeSensor=1; // Inform program sensor has been set properly. 
-    } else {
-        Serial.println("Failed to initialize temperature sensor!");
-    }
+    } 
+    else {
+	Serial.println("Failed to initialize temperature sensor!");
+	safeSensor = 0;
+	sendFailedSetupWarning(LED_BUILTIN);
+   }
+
 }
 
 /**
@@ -81,8 +85,8 @@ void loop() {
         Serial.println("°C");
 
         // Check if temperature is out of the predefined safe range
-        if (inRange(temperature, MIN_TEMP, MAX_TEMP) {
-            sendWarning(temperature);  // Trigger warning via HelperFunctions.h
+        if (inRange(temperature, MIN_TEMP, MAX_TEMP)) {
+            sendWarning(temperature, LED_BUILTIN);  // Trigger warning via HelperFunctions.h
         }
 
         delay(1000);  // Wait 1 second before taking the next reading
