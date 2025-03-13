@@ -13,6 +13,7 @@
 
 
 #include <Arduino.h>  // Required for analogRead, digitalWrite, and Serial
+#include <math.h>
 
 /**
  * @brief Reads voltage from an analog sensor pin.
@@ -84,7 +85,7 @@ bool inRange(float integ_temp, float min, float max) {
  */
 float voltageToTemperature(int analogValue) {
     float voltage = (analogValue / 1023.0) * 5.0;  // Convert ADC value to voltage
-    float r_2 = ((voltage/9 + (1/3)) * 300000) / (1 - (voltage/9 + (1/3))); // Calculate r_2
-    float temperature = (voltage - 0.5) * 100.0;   // Convert voltage to temperature
+    float r_2 = ((voltage/9 + (1/3)) * 300000) / (1 - (voltage/9 + (1/3))); // Calculate r_2 (sensor)
+    float temperature = 82104*pow(2.718281828459045,-0.0547);   // Convert voltage to temperature
     return temperature;
 }
