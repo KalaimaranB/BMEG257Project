@@ -84,7 +84,7 @@ bool inRange(float integ_temp, float min, float max) {
  */
 float voltageToTemperature(int analogValue) {
     float voltage = (analogValue / 1023.0) * 5.0;  // Convert ADC value to voltage
-    float r_2 = ((voltage/9 + (1/3)) * 300000) / (1 - (voltage/9 + (1/3)));
+    float r_2 = ((voltage/9 + (1/3)) * 300000) / (1 - (voltage/9 + (1/3))); // Calculate r_2
     float temperature = (voltage - 0.5) * 100.0;   // Convert voltage to temperature
     return temperature;
 }
