@@ -24,23 +24,11 @@
 
 // Define the analog pin for temperature sensor input
 #define TEMP_SENSOR_PIN A0
+// Minimum & maximal acceptable temperature in Celsius
+#define MIN_TEMP 15.0 
+#define MAX_TEMP 30.0 
 // Define tracker if sensor is working
 int safeSensor = 0;
-
-/**
- * @brief Converts the raw analog sensor reading to temperature in degrees Celsius.
- * 
- * The function takes the raw 10-bit ADC value (0-1023) and converts it into a voltage.
- * It then applies a predefined conversion formula to estimate the temperature in Celsius.
- * 
- * @param analogValue The raw ADC value from the temperature sensor (range: 0-1023).
- * @return float The calculated temperature in degrees Celsius.
- */
-float voltageToTemperature(int analogValue) {
-    float voltage = (analogValue / 1023.0) * 5.0;  // Convert ADC value to voltage (assuming 5V system)
-    float temperature = (voltage - 0.5) * 100.0;  // Convert voltage to temperature (ADJUST FORMULA
-    return temperature;
-}
 
 /**
  * @brief Sets up the Arduino and initializes components.
@@ -85,7 +73,7 @@ void setup() {
  */
 void loop() {
     if (safeSensor == 1){
-        int sensorValue = analogRead(TEMP_SENSOR_PIN);  // Read sensor data from A0
+        int sensorValue = readVoltage(TEMP_SENSOR_PIN);  // Read sensor data from A0
         float temperature = voltageToTemperature(sensorValue);  // Convert raw value to temperature
 
         Serial.print("Current Temperature: ");
@@ -93,23 +81,13 @@ void loop() {
         Serial.println("°C");
 
         // Check if temperature is out of the predefined safe range
-        if (temperature < MIN_TEMP || temperature > MAX_TEMP) {
-
+        if (inRange(temperature, MIN_TEMP, MAX_TEMP) {
             sendWarning(temperature);  // Trigger warning via HelperFunctions.h
-
-	    // Blink built-in LED as a visual alert
-            digitalWrite(LED_BUILTIN, HIGH);
-            delay(500);
-    	    digitalWrite(LED_BUILTIN, LOW);
-            delay(500);
         }
 
         delay(1000);  // Wait 1 second before taking the next reading
     }
     else{
-        digitalWrite(LED_BUILTIN,HIGH);
-        delay(2000);
-	digitalWrite(LED_BUILTIN,LOW);
-	delay(500);
+	sendFailedSetupWarning(LED_BUILTIN);
     }
 }
