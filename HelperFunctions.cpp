@@ -54,6 +54,31 @@ void sendWarning(float temperature, int LED_BUILTIN) {
 }
 
 /**
+ * @brief Calculates output voltage
+ * 
+ * This function calculates the output voltage given R1, R2, and the
+ * input voltage.
+ * 
+ * @param v_in The input voltage in volts.
+ * @param r2 The resistance of R2 in ohms.
+ * @param r1 The resistance of R1 in ohms.
+ * @return v_out The output voltage in volts.
+ */
+double calculate_v_out(double v_in, double r2, double r1) {
+
+    // Declare v_out
+    double v_out;
+    
+    // Calculate v_out using the formula from the circuits assignment
+    v_out = -(v_in * (r1 - 2 * r2)) / (3 * (r1 + r2));
+
+    // Output the result
+    printf("The value of v_out is: %lf\n", v_out);
+
+    return v_out;
+}
+
+/**
  * @brief Checks if a given temperature is within a safe range.
  * 
  * This function verifies whether a temperature value is within the specified
