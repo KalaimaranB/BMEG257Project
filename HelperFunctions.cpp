@@ -87,19 +87,3 @@ float voltageToTemperature(int analogValue) {
     float temperature = (voltage - 0.5) * 100.0;   // Convert voltage to temperature
     return temperature;
 }
-
-/**
- * @brief Initializes the temperature sensor.
- * 
- * This function is currently a placeholder. It should include sensor initialization logic,
- * such as checking if the sensor is connected and functional.
- * 
- * @return bool True if the sensor initialized successfully, otherwise false.
- * 
- * @note This function is currently incomplete. Implementation is required.
- */
-bool initTemperatureSensor() {
-    // TODO: Implement proper sensor initialization logic
-    // Return false if something goes wrong during initialization!
-    return true;  // Placeholder return value
-}
