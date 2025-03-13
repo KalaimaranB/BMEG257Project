@@ -1,0 +1,115 @@
+/**
+ * Arduino Temperature Monitoring System
+ * 
+ * This script reads temperature from an analog sensor connected to A0,
+ * compares it against a safe range, and alerts the user if it goes out of range.
+ * 
+ * Features:
+ * - Reads temperature from an analog input.
+ * - Converts sensor voltage to temperature using a predefined formula.
+ * - Uses the built-in LED (LED_BUILTIN) to indicate warnings when temperature is out of range.
+ * - Continuously checks temperature every second.
+ * - Sends temperature readings and warnings via Serial Monitor.
+ * 
+ * Hardware:
+ * - Temperature sensor connected to A0 (analog input).
+ * - Built-in LED blinks when temperature is out of range.
+ * 
+ * Dependencies:
+ * - Uses "HelperFunctions.h" for sensor initialization and warning messages.
+ */
+
+#include <Arduino.h>
+#include "HelperFunctions.h"  // Include helper functions for initialization and warnings
+
+// Define the analog pin for temperature sensor input
+#define TEMP_SENSOR_PIN A0
+// Define tracker if sensor is working
+int safeSensor = 0;
+
+/**
+ * @brief Converts the raw analog sensor reading to temperature in degrees Celsius.
+ * 
+ * The function takes the raw 10-bit ADC value (0-1023) and converts it into a voltage.
+ * It then applies a predefined conversion formula to estimate the temperature in Celsius.
+ * 
+ * @param analogValue The raw ADC value from the temperature sensor (range: 0-1023).
+ * @return float The calculated temperature in degrees Celsius.
+ */
+float voltageToTemperature(int analogValue) {
+    float voltage = (analogValue / 1023.0) * 5.0;  // Convert ADC value to voltage (assuming 5V system)
+    float temperature = (voltage - 0.5) * 100.0;  // Convert voltage to temperature (ADJUST FORMULA
+    return temperature;
+}
+
+/**
+ * @brief Sets up the Arduino and initializes components.
+ * 
+ * This function initializes serial communication, sets up the sensor input pin,
+ * and configures the built-in LED as an output. It also calls the helper function
+ * to initialize the temperature sensor.
+ * 
+ * @sideeffect Enables Serial communication.
+ * @sideeffect Configures the built-in LED for output.
+ * 
+ * @note If sensor initialization fails, an error message is printed to the Serial Monitor.
+ */
+void setup() {
+    Serial.begin(9600);  // Start serial communication at 9600 baud
+    pinMode(TEMP_SENSOR_PIN, INPUT);  // Set temperature sensor pin as input
+    pinMode(LED_BUILTIN, OUTPUT);  // Configure built-in LED as output
+
+    if (initTemperatureSensor()) {
+        Serial.println("Temperature sensor initialized successfully.");
+	safeSensor=1; // Inform program sensor has been set properly. 
+    } else {
+        Serial.println("Failed to initialize temperature sensor!");
+    }
+}
+
+/**
+ * @brief Continuously reads temperature and checks for out-of-range conditions.
+ * 
+ * This function:
+ * - Reads the raw temperature sensor value from the analog pin.
+ * - Converts it to temperature in Celsius.
+ * - Prints the temperature to the Serial Monitor.
+ * - Checks if the temperature is outside the safe range.
+ * - If out of range, it calls `sendWarning()` from HelperFunctions.h and blinks the LED.
+ * 
+ * @sideeffect Blinks the built-in LED when the temperature is out of range.
+ * @sideeffect Prints temperature readings to Serial Monitor.
+ * @sideeffect Calls `sendWarning()` when temperature exceeds safe limits.
+ * 
+ * @note The function loops indefinitely, reading temperature every second.
+ */
+void loop() {
+    if (safeSensor == 1){
+        int sensorValue = analogRead(TEMP_SENSOR_PIN);  // Read sensor data from A0
+        float temperature = voltageToTemperature(sensorValue);  // Convert raw value to temperature
+
+        Serial.print("Current Temperature: ");
+        Serial.print(temperature);
+        Serial.println("°C");
+
+        // Check if temperature is out of the predefined safe range
+        if (temperature < MIN_TEMP || temperature > MAX_TEMP) {
+
+            sendWarning(temperature);  // Trigger warning via HelperFunctions.h
+
+	    // Blink built-in LED as a visual alert
+            digitalWrite(LED_BUILTIN, HIGH);
+            delay(500);
+    	    digitalWrite(LED_BUILTIN, LOW);
+            delay(500);
+        }
+
+        delay(1000);  // Wait 1 second before taking the next reading
+    }
+    else{
+        digitalWrite(LED_BUILTIN,HIGH);
+        delay(2000);
+	digitalWrite(LED_BUILTIN,LOW);
+	delay(500);
+    }
+}
