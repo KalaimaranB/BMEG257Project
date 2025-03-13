@@ -26,7 +26,7 @@
  * @note This function simulates sensor reading. Replace with actual sensor logic if needed.
  */
 float readVoltage(int pinNumber) {
-    return analogRead(pinNumber);
+    return (analogRead(pinNumber) / 1023.0) * 5.0;  // Convert ADC to voltage 
 }
 
 /**
@@ -69,7 +69,9 @@ void sendFailedSetupWarning(int LED_BUILTIN) {
     digitalWrite(LED_BUILTIN, HIGH);
     delay(2000);  // Long blink to indicate failure
     digitalWrite(LED_BUILTIN, LOW);
-    delay(200);
+    delay(500);
+    delay(2000);  // Second Long blink to indicate failure
+    digitalWrite(LED_BUILTIN, LOW);
 }
 
 /**
