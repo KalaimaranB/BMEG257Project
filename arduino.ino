@@ -29,7 +29,6 @@
 #define MIN_TEMP 15.0 
 #define MAX_TEMP 30.0 
 // Define tracker if sensor is working
-int safeSensor = 0;
 
 /**
  * @brief Sets up the Arduino and initializes components.
@@ -47,17 +46,7 @@ void setup() {
     Serial.begin(9600);  // Start serial communication at 9600 baud
     pinMode(TEMP_SENSOR_PIN, INPUT);  // Set temperature sensor pin as input
     pinMode(LED_BUILTIN, OUTPUT);  // Configure built-in LED as output
-
-    if (initTemperatureSensor()) {
-        Serial.println("Temperature sensor initialized successfully.");
-	safeSensor=1; // Inform program sensor has been set properly. 
-    } 
-    else {
-	Serial.println("Failed to initialize temperature sensor!");
-	safeSensor = 0;
-	sendFailedSetupWarning(LED_BUILTIN);
-   }
-
+    Serial.println("Temperature sensor initialized successfully.");
 }
 
 /**
@@ -77,22 +66,16 @@ void setup() {
  * @note The function loops indefinitely, reading temperature every second.
  */
 void loop() {
-    if (safeSensor == 1){
-        int sensorValue = readVoltage(TEMP_SENSOR_PIN);  // Read sensor data from A0
-        float temperature = voltageToTemperature(sensorValue);  // Convert raw value to temperature
-
-        Serial.print("Current Temperature: ");
-        Serial.print(temperature);
-        Serial.println("°C");
-
-        // Check if temperature is out of the predefined safe range
-        if (inRange(temperature, MIN_TEMP, MAX_TEMP)) {
-            sendWarning(temperature, LED_BUILTIN);  // Trigger warning via HelperFunctions.h
-        }
-
-        delay(1000);  // Wait 1 second before taking the next reading
+    int sensorValue = readVoltage(TEMP_SENSOR_PIN);  // Read sensor data from A0
+    float temperature = voltageToTemperature(sensorValue);  // Convert raw value to temperature
+	
+    Serial.print("Current Temperature: ");
+    Serial.print(temperature);
+    Serial.println("°C");
+	
+    // Check if temperature is out of the predefined safe range
+    if (inRange(temperature, MIN_TEMP, MAX_TEMP)) {
+	sendWarning(temperature, LED_BUILTIN);  // Trigger warning via HelperFunctions.h
     }
-    else{
-	sendFailedSetupWarning(LED_BUILTIN);
-    }
+    delay(1000);  // Wait 1 second before taking the next reading
 }
