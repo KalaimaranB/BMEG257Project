@@ -2,25 +2,26 @@
 // Created by Emily on 2025-03-20.
 //
 
+#ifndef TESTS_H
+#define TESTS_H
+
 #include <iostream>
 #include <string>
-#include <vector>
-#include <stdexcept>
+#include <functional> // For std::function
 
 template <typename T>
-class tests {
+class Tests {
 public:
-    tests(const std::string& suiteName) : suiteName_(suiteName), passed_(0), failed_(0) {}
+    Tests(const std::string& suiteName);
 
-    void runTest(const std::string& testName, const T& expected, const T& actual) {
-        std::cout << "Test: " << testName << "... ";
-        if (expected == actual) {
-            std::cout << "Passed" << std::endl;
-            passed_++;
-        } else {
-            std::cout << "Failed" << std::endl;
-            std::cout << "  Expected: " << expected << std::endl;
-            std::cout << "  Actual:   " << actual << std::endl;
-            failed_++;
-        }
-    }
+    void runTest(const std::string& testName, const T& expected, const T& actual);
+
+    void printResults() const;
+
+private:
+    std::string suiteName_;
+    int passed_;
+    int failed_;
+};
+
+#endif // TESTS_H
